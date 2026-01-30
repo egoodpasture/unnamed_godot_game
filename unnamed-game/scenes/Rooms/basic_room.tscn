@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://b6ifvl48g1dh8"]
+
+[ext_resource type="Script" uid="uid://bn4oyj5k058sd" path="res://scripts/basic_room.gd" id="1_yc5m6"]
+[ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Player.tscn" id="2_sv0tl"]
+[ext_resource type="Texture2D" uid="uid://b3ym4i5kpgn73" path="res://assets/sprites/placeholder_room.png" id="3_qsn1o"]
+
+[sub_resource type="TileSet" id="TileSet_sv0tl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qsn1o"]
+size = Vector2(720, 720)
+
+[node name="Room" type="Node2D"]
+script = ExtResource("1_yc5m6")
+
+[node name="Player" parent="." instance=ExtResource("2_sv0tl")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_qsn1o")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_sv0tl")
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+
+[node name="Bounds" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds"]
+shape = SubResource("RectangleShape2D_qsn1o")
