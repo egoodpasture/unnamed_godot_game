@@ -1,0 +1,11 @@
+# Godot-specific
+.godot/
+.import/
+
+# Exported builds
+export/
+exports/
+
+# Mono / C# (if you ever use it)
+.mono/
+data_*/
