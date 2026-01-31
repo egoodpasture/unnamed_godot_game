@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var move_speed := 250.0
+@export var move_speed := 500.0
 @export var tear_scene: PackedScene
 @export var fire_rate:= 0.35 #seconds between shots
 

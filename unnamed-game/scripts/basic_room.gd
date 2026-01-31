@@ -3,14 +3,14 @@ extends Node2D
 signal room_cleared
 
 @export var enemy_scene: PackedScene
-@export var player_scene: PackedScene
+#@export var player_scene: PackedScene
 
 var enemies_alive := 0
 
-func ready():
-	var player = player_scene.instantiate()
-	add_child(player)
-	player.global_position = $PlayerSpawn.global_position
+func _ready():
+	#var player = player_scene.instantiate()
+	#add_child(player)
+	#player.global_position = $PlayerSpawn.global_position
 	spawn_enemies()
 	lock_doors()
 
