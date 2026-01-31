@@ -1,5 +1,7 @@
 extends Area2D
 
+@onready var _animated_sprite = $AnimatedSprite2D
+
 @export var speed := 600.0
 @export var lifetime := 2.0
 
@@ -11,6 +13,7 @@ func _ready():
 	queue_free()
 
 func _physics_process(delta):
+	_animated_sprite.play("spin")
 	global_position += direction * speed * delta
 
 func _on_body_entered(body):

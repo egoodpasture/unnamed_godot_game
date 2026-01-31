@@ -15,6 +15,11 @@ run/main_scene="uid://b6ifvl48g1dh8"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+
 [input]
 
 move_up={
@@ -60,4 +65,5 @@ shoot_right={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
