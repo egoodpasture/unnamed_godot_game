@@ -1,33 +1,48 @@
 extends CharacterBody2D
 
-@export var move_speed := 500.0 #???
+@export var move_speed := 400.0 #???
+@export var sprint_multiplier := 1.8
 @export var tear_scene: PackedScene
 @export var fire_rate:= 0.3 #seconds between shots
 @export var dodge_duration := 0.1 #seconds (6 frames?)
 @export var dodge_distance := 60.0 #pixels?
 @export var dodge_speed := 1200.0 # ???
+@export var dodge_tap_time := 0.18 #seconds
 
 @onready var shoot_point: Marker2D = $ShootPoint
 @onready var fire_timer: Timer = $FireCooldown
 
+@onready var _player_sprite = $PlayerSprite
+@onready var _left_dodge = $DodgeSprites/LeftDodge
+@onready var _right_dodge = $DodgeSprites/RightDodge
+
 #var move_dir := Vector2.ZERO
 var move_input_vector := Vector2.ZERO
-var dodge_dir := Vector2.ZERO
+#var dodge_dir := Vector2.ZERO
 var dodge_time := 0.0
+var dodge_held_time := 0.0
+var is_sprinting := false
+var dodge_queued := false
 
 func _ready():
 	fire_timer.wait_time = fire_rate
 	fire_timer.one_shot = true
 
 func _physics_process(delta):
-	handle_dodging()
+	#_horiz_dodge.visible = false
+	handle_dodging(delta)
+	
+	if move_input_vector == Vector2.RIGHT: _player_sprite.flip_h = true
+	elif move_input_vector == Vector2.LEFT: _player_sprite.flip_h = false
 	if dodge_time > 0:
-		velocity = dodge_dir * dodge_speed
+		velocity = move_input_vector * dodge_speed
 		dodge_time -= delta
-		move_and_slide()
+		if move_input_vector == Vector2.LEFT: _left_dodge.play("animate")
+		if move_input_vector == Vector2.RIGHT: _right_dodge.play("animate")
 	else:
 		handle_movement()
 	
+	move_and_slide()
 	handle_shooting()
 
 func handle_movement():
@@ -35,22 +50,32 @@ func handle_movement():
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"), 
 		Input.get_action_strength("move_down") - Input.get_action_strength("move_up") 
 	)
-	#move_dir = Vector2(
-		#Input.get_action_strength("move_right") - Input.get_action_strength("move_left"), 
-		#Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
-	#)
-	
+
 	if move_input_vector.length() > 0:
 		move_input_vector = move_input_vector.normalized()
-	
-	velocity = move_input_vector.normalized() * move_speed
-	move_and_slide()
+	if is_sprinting:
+		velocity = move_input_vector * move_speed * sprint_multiplier
+	else:
+		velocity = move_input_vector.normalized() * move_speed
 
-func handle_dodging():
-	var direction := Vector2.ZERO
+func handle_dodging(delta):
+	if Input.is_action_just_pressed("dodge"):
+		dodge_held_time = 0.0
+		is_sprinting = false
+		dodge_queued = true
 	
-	direction = move_input_vector
-	if Input.is_action_just_released("dodge"): dodge(direction)
+	if Input.is_action_pressed("dodge"):
+		dodge_held_time += delta
+		
+		if dodge_held_time >= dodge_tap_time:
+			is_sprinting = true
+			dodge_queued = false
+	
+	if Input.is_action_just_released("dodge"):
+		if dodge_queued && !is_sprinting:
+			dodge(move_input_vector)
+		elif !dodge_queued && is_sprinting:
+			is_sprinting = false
 
 func handle_shooting():
 	if fire_timer.time_left > 0:
@@ -93,7 +118,7 @@ func get_shoot_direction() -> Vector2:
 func dodge(direction: Vector2):
 	if direction == Vector2.ZERO: return
 
-	dodge_dir = direction.normalized()
+	#dodge_dir = direction.normalized()
 	dodge_time = dodge_duration
 	#get_parent().global_position += direction.normalized() * dodge_distance
 
