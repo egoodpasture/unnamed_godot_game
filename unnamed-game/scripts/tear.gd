@@ -2,7 +2,7 @@ extends Area2D
 
 @onready var _animated_sprite = $AnimatedSprite2D
 
-@export var speed := 600.0
+@export var speed := 575.0
 @export var lifetime := 2.0
 
 var direction := Vector2.ZERO

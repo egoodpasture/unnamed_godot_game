@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://jdk4yvvgvt7o"]
 
 [ext_resource type="Script" uid="uid://dwd6dfrtsxe1a" path="res://scripts/tear.gd" id="1_scwp1"]
-[ext_resource type="Texture2D" uid="uid://dfx4vfa51bxv6" path="res://assets/sprites/placeholder_tear.png" id="2_wa4d6"]
+[ext_resource type="Texture2D" uid="uid://dfx4vfa51bxv6" path="res://assets/sprites/temp_tear_sheet.png" id="2_wa4d6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_scwp1"]
 atlas = ExtResource("2_wa4d6")
