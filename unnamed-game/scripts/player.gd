@@ -4,6 +4,9 @@ extends CharacterBody2D
 @export var sprint_multiplier := 1.8
 @export var tear_scene: PackedScene
 @export var fire_rate:= 0.3 #seconds between shots
+
+@export var max_health := 1
+
 @export var dodge_duration := 0.1 #seconds (6 frames?)
 @export var dodge_distance := 60.0 #pixels?
 @export var dodge_speed := 1200.0 # ???
@@ -16,9 +19,14 @@ extends CharacterBody2D
 @onready var _left_dodge = $DodgeSprites/LeftDodge
 @onready var _right_dodge = $DodgeSprites/RightDodge
 
-#var move_dir := Vector2.ZERO
+@onready var _death_sound = $Death/DeathSound
+@onready var _death_animation = $Death/DeathAnimation
+
+var health := max_health
+var hit_invincibility_time := 0.8
+var invincible := false
+
 var move_input_vector := Vector2.ZERO
-#var dodge_dir := Vector2.ZERO
 var dodge_time := 0.0
 var dodge_held_time := 0.0
 var is_sprinting := false
@@ -127,3 +135,30 @@ func shoot(direction: Vector2):
 	tear.global_position = shoot_point.global_position
 	tear.direction = direction
 	get_parent().add_child(tear)
+
+func take_damage(amount: int):
+	if invincible: return
+	
+	health -= amount
+	print("Player hit! HP:", health)
+	
+	if health <= 0:
+		die()
+	
+	invincible = true
+	$Hurtbox.set_deferred("monitoring", false)
+	
+	await get_tree().create_timer(hit_invincibility_time).timeout
+	
+	invincible = false
+	$Hurtbox.set_deferred("monitoring", true)
+
+func die():
+	print ("player died xd")
+	$PlayerSprite.visible = false
+	_death_animation.play("explode")
+	_death_sound.play()
+	#_death_sound.stop()
+	await get_tree().create_timer(.85).timeout
+	
+	queue_free()
