@@ -15,7 +15,7 @@ extends CharacterBody2D
 @onready var shoot_point: Marker2D = $ShootPoint
 @onready var fire_timer: Timer = $FireCooldown
 
-@onready var _player_sprite = $PlayerSprite
+@onready var _player_sprite = $AnimatedPlayerSprite
 @onready var _left_dodge = $DodgeSprites/LeftDodge
 @onready var _right_dodge = $DodgeSprites/RightDodge
 
@@ -35,6 +35,7 @@ var is_sprinting := false
 var dodge_queued := false
 
 func _ready():
+	_player_sprite.play("idle")
 	fire_timer.wait_time = fire_rate
 	fire_timer.one_shot = true
 
@@ -155,9 +156,9 @@ func take_damage(amount: int):
 	if health <= 0:
 		die()
 
-	$PlayerSprite.modulate = Color.RED
+	_player_sprite.modulate = Color.RED
 	await get_tree().create_timer(.1).timeout
-	$PlayerSprite.modulate = Color.WHITE
+	_player_sprite.modulate = Color.WHITE
 	
 	invincible = true
 	$Hurtbox.set_deferred("monitoring", false)
@@ -173,7 +174,7 @@ func take_damage(amount: int):
 func die():
 	dead = true
 	print ("player died xd")
-	$PlayerSprite.visible = false
+	_player_sprite.visible = false
 	_death_animation.play("explode")
 	_death_sound.play()
 	#_death_sound.stop()
