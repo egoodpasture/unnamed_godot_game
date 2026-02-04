@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://b6ifvl48g1dh8"]
 
 [ext_resource type="Script" uid="uid://bn4oyj5k058sd" path="res://scripts/basic_room.gd" id="1_yc5m6"]
-[ext_resource type="PackedScene" uid="uid://b6k25q4pwi7ek" path="res://scenes/Enemy.tscn" id="2_lyy10"]
+[ext_resource type="PackedScene" uid="uid://b6k25q4pwi7ek" path="res://scenes/Enemies/boss1.tscn" id="2_lyy10"]
 [ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Player.tscn" id="2_sv0tl"]
 [ext_resource type="Texture2D" uid="uid://b73soy0nn4riq" path="res://assets/TileSet.png" id="4_4har8"]
 

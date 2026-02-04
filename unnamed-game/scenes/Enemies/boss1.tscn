@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://b6k25q4pwi7ek"]
+
+[ext_resource type="Script" uid="uid://vxo12qxx774j" path="res://scripts/Boss Scripts/boss1.gd" id="1_oqqws"]
+[ext_resource type="Texture2D" uid="uid://c8n6ym78q76l5" path="res://assets/sprites/temp_enemy.png" id="2_55jtl"]
+[ext_resource type="Texture2D" uid="uid://difjvbijj551v" path="res://assets/sprites/shadow_sword.png" id="3_jpy4w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_55jtl"]
+size = Vector2(64, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mpr68"]
+size = Vector2(64, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t6e3c"]
+size = Vector2(21, 239)
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1002671579]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_oqqws")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=133639717]
+texture = ExtResource("2_55jtl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1617253115]
+shape = SubResource("RectangleShape2D_55jtl")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=587903185]
+scale = Vector2(0.8, 0.8)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1194493598]
+shape = SubResource("RectangleShape2D_mpr68")
+debug_color = Color(0.9997296, 0, 0.11841602, 0.41960785)
+
+[node name="Sword" type="Node2D" parent="." unique_id=368580640]
+
+[node name="Sprite2D" type="Sprite2D" parent="Sword" unique_id=457620008]
+visible = false
+rotation = 1.5707964
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("3_jpy4w")
+offset = Vector2(0, -120)
+
+[node name="SweepAttack" type="Node2D" parent="Sword" unique_id=610471509]
+
+[node name="SweepHitbox" type="Area2D" parent="Sword/SweepAttack" unique_id=1318301495]
+collision_layer = 8
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/SweepAttack/SweepHitbox" unique_id=1754181043]
+position = Vector2(195.5, 0.5000002)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_t6e3c")

@@ -5,12 +5,12 @@ extends CharacterBody2D
 @export var tear_scene: PackedScene
 @export var fire_rate:= 0.3 #seconds between shots
 
-@export var max_health := 1
+@export var max_health := 3
 
-@export var dodge_duration := 0.1 #seconds (6 frames?)
+@export var dodge_duration := 0.15 #seconds (8 frames?)
 @export var dodge_distance := 60.0 #pixels?
 @export var dodge_speed := 1200.0 # ???
-@export var dodge_tap_time := 0.18 #seconds
+@export var dodge_tap_time := 0.25 #seconds
 
 @onready var shoot_point: Marker2D = $ShootPoint
 @onready var fire_timer: Timer = $FireCooldown
@@ -23,8 +23,10 @@ extends CharacterBody2D
 @onready var _death_animation = $Death/DeathAnimation
 
 var health := max_health
+var dead := false
 var hit_invincibility_time := 0.8
 var invincible := false
+var dodge_invincible := false
 
 var move_input_vector := Vector2.ZERO
 var dodge_time := 0.0
@@ -37,7 +39,8 @@ func _ready():
 	fire_timer.one_shot = true
 
 func _physics_process(delta):
-	#_horiz_dodge.visible = false
+	if dead: return
+	
 	handle_dodging(delta)
 	
 	if move_input_vector == Vector2.RIGHT: _player_sprite.flip_h = true
@@ -47,6 +50,9 @@ func _physics_process(delta):
 		dodge_time -= delta
 		if move_input_vector == Vector2.LEFT: _left_dodge.play("animate")
 		if move_input_vector == Vector2.RIGHT: _right_dodge.play("animate")
+		
+		if dodge_time <= 0:
+			end_dodge()
 	else:
 		handle_movement()
 	
@@ -126,9 +132,15 @@ func get_shoot_direction() -> Vector2:
 func dodge(direction: Vector2):
 	if direction == Vector2.ZERO: return
 
-	#dodge_dir = direction.normalized()
 	dodge_time = dodge_duration
-	#get_parent().global_position += direction.normalized() * dodge_distance
+	dodge_invincible = true
+	invincible = true
+	$Hurtbox.set_deferred("monitoring", false)
+
+func end_dodge():
+	dodge_invincible = false
+	invincible = false
+	$Hurtbox.set_deferred("monitoring", true)
 
 func shoot(direction: Vector2):
 	var tear = tear_scene.instantiate()
@@ -140,20 +152,26 @@ func take_damage(amount: int):
 	if invincible: return
 	
 	health -= amount
-	print("Player hit! HP:", health)
-	
 	if health <= 0:
 		die()
+
+	$PlayerSprite.modulate = Color.RED
+	await get_tree().create_timer(.1).timeout
+	$PlayerSprite.modulate = Color.WHITE
 	
 	invincible = true
 	$Hurtbox.set_deferred("monitoring", false)
 	
+	# on hit i frames
 	await get_tree().create_timer(hit_invincibility_time).timeout
 	
-	invincible = false
-	$Hurtbox.set_deferred("monitoring", true)
+	#only re enable if not dodging
+	if not dodge_invincible:
+		invincible = false
+		$Hurtbox.set_deferred("monitoring", true)
 
 func die():
+	dead = true
 	print ("player died xd")
 	$PlayerSprite.visible = false
 	_death_animation.play("explode")

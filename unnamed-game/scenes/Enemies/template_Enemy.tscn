@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://b6k25q4pwi7ek"]
+[gd_scene format=3 uid="uid://cwxggqjnyacjg"]
 
-[ext_resource type="Script" uid="uid://c5oxsmt0dppwo" path="res://scripts/enemy.gd" id="1_3gvst"]
-[ext_resource type="Texture2D" uid="uid://c8n6ym78q76l5" path="res://assets/sprites/temp_enemy.png" id="2_55jtl"]
+[ext_resource type="Script" uid="uid://c5oxsmt0dppwo" path="res://scripts/Boss Scripts/template_enemy.gd" id="1_pvut2"]
+[ext_resource type="Texture2D" uid="uid://c8n6ym78q76l5" path="res://assets/sprites/temp_enemy.png" id="2_h366a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_55jtl"]
 size = Vector2(64, 64)
@@ -12,10 +12,10 @@ size = Vector2(64, 64)
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1002671579]
 collision_layer = 2
 collision_mask = 4
-script = ExtResource("1_3gvst")
+script = ExtResource("1_pvut2")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=133639717]
-texture = ExtResource("2_55jtl")
+texture = ExtResource("2_h366a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1617253115]
 shape = SubResource("RectangleShape2D_55jtl")
