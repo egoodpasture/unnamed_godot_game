@@ -15,7 +15,7 @@ extends CharacterBody2D
 @onready var shoot_point: Marker2D = $ShootPoint
 @onready var fire_timer: Timer = $FireCooldown
 
-@onready var _player_sprite = $AnimatedPlayerSprite
+@onready var _player_sprite = $PlayerSprite
 @onready var _left_dodge = $DodgeSprites/LeftDodge
 @onready var _right_dodge = $DodgeSprites/RightDodge
 
@@ -35,7 +35,7 @@ var is_sprinting := false
 var dodge_queued := false
 
 func _ready():
-	_player_sprite.play("idle")
+	#s_player_sprite.play("idle")
 	fire_timer.wait_time = fire_rate
 	fire_timer.one_shot = true
 
