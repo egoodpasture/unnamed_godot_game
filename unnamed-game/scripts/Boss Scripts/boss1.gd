@@ -17,7 +17,7 @@ var player : CharacterBody2D
 @export var sweep_endlag := .6 #seconds
 @export var sweep_angle := 235.0 #degrees
 @export var sweep_duration := 0.5 #seconds
-@export var sweep_radius := 48.0
+#@export var sweep_radius := 48.0
 
 @onready var sprite: Sprite2D = $Sprite2D
 
