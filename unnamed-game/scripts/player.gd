@@ -15,12 +15,12 @@ extends CharacterBody2D
 @onready var shoot_point: Marker2D = $ShootPoint
 @onready var fire_timer: Timer = $FireCooldown
 
-@onready var _player_sprite = $AnimatedPlayerSprite
-@onready var _left_dodge = $DodgeSprites/LeftDodge
-@onready var _right_dodge = $DodgeSprites/RightDodge
+@onready var player_sprite = $AnimatedPlayerSprite
+@onready var left_dodge = $DodgeSprites/LeftDodge
+@onready var right_dodge = $DodgeSprites/RightDodge
 
-@onready var _death_sound = $Death/DeathSound
-@onready var _death_animation = $Death/DeathAnimation
+@onready var death_sound = $Death/DeathSound
+@onready var death_animation = $Death/DeathAnimation
 
 var health := max_health
 var dead := false
@@ -35,7 +35,7 @@ var is_sprinting := false
 var dodge_queued := false
 
 func _ready():
-	_player_sprite.play("idle")
+	player_sprite.play("idle")
 	fire_timer.wait_time = fire_rate
 	fire_timer.one_shot = true
 
@@ -44,13 +44,13 @@ func _physics_process(delta):
 	
 	handle_dodging(delta)
 	
-	if move_input_vector == Vector2.RIGHT: _player_sprite.flip_h = true
-	elif move_input_vector == Vector2.LEFT: _player_sprite.flip_h = false
+	if move_input_vector == Vector2.RIGHT: player_sprite.flip_h = true
+	elif move_input_vector == Vector2.LEFT: player_sprite.flip_h = false
 	if dodge_time > 0:
 		velocity = move_input_vector * dodge_speed
 		dodge_time -= delta
-		if move_input_vector == Vector2.LEFT: _left_dodge.play("animate")
-		if move_input_vector == Vector2.RIGHT: _right_dodge.play("animate")
+		if move_input_vector == Vector2.LEFT: left_dodge.play("animate")
+		if move_input_vector == Vector2.RIGHT: right_dodge.play("animate")
 		
 		if dodge_time <= 0:
 			end_dodge()
@@ -124,9 +124,8 @@ func get_shoot_direction() -> Vector2:
 
 	# If moving diagonally, bias the shot
 	if move_input_vector != Vector2.ZERO:
-		if ((shoot_dir + move_input_vector) != Vector2.ZERO): 
-			shoot_dir += move_input_vector
-			shoot_dir = shoot_dir.normalized()
+		shoot_dir = shoot_dir.lerp(move_input_vector, 0.25)
+		shoot_dir = shoot_dir.normalized()
 
 	return shoot_dir
 
@@ -150,15 +149,16 @@ func shoot(direction: Vector2):
 	get_parent().add_child(tear)
 
 func take_damage(amount: int):
+	if dead: return
 	if invincible: return
 	
 	health -= amount
 	if health <= 0:
 		die()
 
-	_player_sprite.modulate = Color.RED
+	player_sprite.modulate = Color.RED
 	await get_tree().create_timer(.1).timeout
-	_player_sprite.modulate = Color.WHITE
+	player_sprite.modulate = Color.WHITE
 	
 	invincible = true
 	$Hurtbox.set_deferred("monitoring", false)
@@ -173,10 +173,9 @@ func take_damage(amount: int):
 
 func die():
 	dead = true
-	print ("player died xd")
-	_player_sprite.visible = false
-	_death_animation.play("explode")
-	_death_sound.play()
+	player_sprite.visible = false
+	death_animation.play("explode")
+	death_sound.play()
 	#_death_sound.stop()
 	await get_tree().create_timer(.85).timeout
 	

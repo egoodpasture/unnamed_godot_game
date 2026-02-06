@@ -5,6 +5,7 @@ enum BossState { IDLE, CHASE, ATTACK }
 var state : BossState = BossState.IDLE
 var player : CharacterBody2D
 
+@export var max_health := 100.0
 @export var move_speed := 100.0
 @export var attack_range := 180.0
 @export var aggro_range := 1200.0
@@ -19,7 +20,12 @@ var player : CharacterBody2D
 @export var sweep_duration := 0.5 #seconds
 #@export var sweep_radius := 48.0
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var boss_sprite: Sprite2D = $Sprite2D
+@onready var death_sound = $Death/DeathSound
+@onready var death_animation = $Death/DeathAnimation
+
+var health := max_health
+var dead := false
 
 var can_attack := true
 
@@ -36,6 +42,7 @@ func _ready():
 	$Sword/SweepAttack/SweepHitbox.area_entered.connect(_on_sweep_hit)
 
 func _physics_process(delta):
+	if dead: return
 	if sweeping: 
 		update_sweep(delta)
 		return
@@ -96,11 +103,11 @@ func start_sweep_windup():
 	$Sword/Sprite2D.rotation = sweep_base_rotation + deg_to_rad(90)
 	$Sword/SweepAttack.rotation = sweep_base_rotation
 	
-	sprite.modulate = Color.RED
+	boss_sprite.modulate = Color.DARK_ORANGE
 	
 	await get_tree().create_timer(sweep_windup).timeout
 	
-	sprite.modulate = Color.WHITE
+	boss_sprite.modulate = Color.WHITE
 	
 	winding_up = false
 	start_sweep()
@@ -140,6 +147,26 @@ func end_sweep():
 func start_sweep_endlag():
 	await get_tree().create_timer(sweep_endlag).timeout
 
-func is_dead():
+func take_damage(amount: float):
+	if dead: return
+	health -= amount
+	print("boss hit! current health: ", health)
+	if health <= 0:
+		die()
+	
+	boss_sprite.modulate = Color.RED
+	await get_tree().create_timer(.1).timeout
+	boss_sprite.modulate = Color.WHITE
+
+func die():
+	dead = true
 	died.emit()
+	boss_sprite.visible = false
+	
+	death_animation.play("explode")
+	death_sound.play()
+	#_death_sound.stop()
+	await get_tree().create_timer(.85).timeout
+	
+	queue_free()
 	queue_free()
