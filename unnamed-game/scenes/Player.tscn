@@ -332,6 +332,7 @@ sprite_frames = SubResource("SpriteFrames_d3wef")
 animation = &"animate"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=52066467]
+visible = false
 shape = SubResource("RectangleShape2D_mdl7e")
 
 [node name="ShootPoint" type="Marker2D" parent="." unique_id=634040588]
@@ -339,6 +340,7 @@ shape = SubResource("RectangleShape2D_mdl7e")
 [node name="FireCooldown" type="Timer" parent="." unique_id=1957307035]
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=16058616 groups=["player_hurtbox"]]
+visible = false
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1381309025]
