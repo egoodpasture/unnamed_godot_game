@@ -184,9 +184,15 @@ animations = [{
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1002671579 groups=["enemy"]]
+scale = Vector2(2, 2)
 collision_layer = 2
 collision_mask = 4
 script = ExtResource("1_oqqws")
+move_speed = 200.0
+aggro_range = 2400.0
+sweep_windup = 0.6
+sweep_endlag = 0.4
+sweep_duration = 0.25
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=133639717]
 texture = ExtResource("2_55jtl")

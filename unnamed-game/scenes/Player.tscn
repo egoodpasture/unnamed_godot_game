@@ -303,9 +303,13 @@ animations = [{
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1278578334 groups=["player"]]
+scale = Vector2(1.5, 1.5)
 collision_mask = 6
 script = ExtResource("1_3vyb7")
+move_speed = 600.0
 tear_scene = ExtResource("2_g2els")
+dodge_duration = 0.2
+dodge_speed = 2000.0
 
 [node name="PlayerSprite" type="Sprite2D" parent="." unique_id=1318702538]
 visible = false

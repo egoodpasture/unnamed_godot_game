@@ -122,13 +122,13 @@ func update_sweep(delta):
 	sweep_time += delta
 	var t := sweep_time / sweep_duration
 	
-	if t >= 0.50:
+	if t >= 1:
 		end_sweep()
 		return
 	
 	var end_angle := deg_to_rad(sweep_angle)
 	
-	var local_angle = lerp(0.0, end_angle, 2*t)
+	var local_angle = lerp(0.0, end_angle, t)
 	$Sword/Sprite2D.rotation = sweep_base_rotation + local_angle + deg_to_rad(90)
 	$Sword/SweepAttack.rotation = sweep_base_rotation + local_angle
 
