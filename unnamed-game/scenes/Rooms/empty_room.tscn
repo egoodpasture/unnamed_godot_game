@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlfxb8jq7h8j7"]
+
+[ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Player.tscn" id="1_6yx73"]
+[ext_resource type="Script" path="res://scripts/empty_room.gd" id="2_yr3tw"]
+
+[node name="EmptyRoom" type="Node2D"]
+script = ExtResource("2_yr3tw")
+
+[node name="Player" parent="." instance=ExtResource("1_6yx73")]
+position = Vector2(0, 220)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, 120)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="InfoPanel" type="Panel" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -150.0
+offset_right = 300.0
+offset_bottom = 150.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InfoPanel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InfoPanel/MarginContainer"]
+
+[node name="Title" type="Label" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer"]
+text = "Next Room (Placeholder)"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer"]
+text = "You moved past the boss door.\nThis room is intentionally empty for now."
+horizontal_alignment = 1
+
+[node name="ReturnToTitleButton" type="Button" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer"]
+text = "Return to Title"
+
+[connection signal="pressed" from="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer/ReturnToTitleButton" to="." method="_on_return_to_title_button_pressed"]
