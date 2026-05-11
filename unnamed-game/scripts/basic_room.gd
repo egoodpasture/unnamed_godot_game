@@ -335,7 +335,7 @@ func _on_settings_menu_closed() -> void:
 func _setup_music() -> void:
 	if room_music == null:
 		return
-	var configured_stream: AudioStream = room_music.duplicate()
+	var configured_stream: AudioStream = room_music.duplicate(true)
 	if configured_stream is AudioStreamMP3:
 		(configured_stream as AudioStreamMP3).loop = true
 	elif configured_stream is AudioStreamOggVorbis:
