@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlfxb8jq7h8j7"]
 
-[ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Classes/Construct.tscn" id="1_6yx73"]
+[ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Classes/construct.tscn" id="1_6yx73"]
 [ext_resource type="Script" uid="uid://c7jytweefr7vf" path="res://scripts/empty_room.gd" id="2_yr3tw"]
 [ext_resource type="AudioStream" uid="uid://cq20f4w2rpnj2" path="res://assets/audio/explosion.mp3" id="3_music"]
 
