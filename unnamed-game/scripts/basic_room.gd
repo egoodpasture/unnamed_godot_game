@@ -333,13 +333,14 @@ func _on_settings_menu_closed() -> void:
 
 
 func _setup_music() -> void:
+	if room_music == null:
+		return
 	_music_player = AudioStreamPlayer.new()
 	_music_player.stream = room_music
 	_music_player.bus = "Music"
 	_music_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_music_player)
-	if room_music != null:
-		_music_player.play()
+	_music_player.play()
 
 
 func _on_return_to_title_pressed() -> void:

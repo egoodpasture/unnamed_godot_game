@@ -13,12 +13,13 @@ func _ready() -> void:
 
 
 func _setup_music() -> void:
+	if room_music == null:
+		return
 	var music_player := AudioStreamPlayer.new()
 	music_player.stream = room_music
 	music_player.bus = "Music"
 	add_child(music_player)
-	if room_music != null:
-		music_player.play()
+	music_player.play()
 
 
 func _on_return_to_title_button_pressed() -> void:
