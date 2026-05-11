@@ -11,9 +11,9 @@ class_name PlayerClasses
 const ALL_CLASSES: Array = [
 	{
 		"id": "adventurer",
-		"display_name": "Adventurer",
-		"description": "A well-rounded fighter ready for anything.\nHP: 3  |  Speed: Normal",
-		"scene_path": "res://scenes/Player.tscn",
+		"display_name": "Construct",
+		"description": "A discarded experiment that harnesses the power of darkness.\nHP: 3  |  Speed: Normal",
+		"scene_path": "res://scenes/Classes/Construct.tscn",
 	},
 	# --- Paste new class blocks here ---
 ]

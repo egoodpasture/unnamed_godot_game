@@ -1,23 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://dlfxb8jq7h8j7"]
+[gd_scene format=3 uid="uid://dlfxb8jq7h8j7"]
 
-[ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Player.tscn" id="1_6yx73"]
-[ext_resource type="Script" path="res://scripts/empty_room.gd" id="2_yr3tw"]
+[ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Classes/Construct.tscn" id="1_6yx73"]
+[ext_resource type="Script" uid="uid://c7jytweefr7vf" path="res://scripts/empty_room.gd" id="2_yr3tw"]
 [ext_resource type="AudioStream" uid="uid://cq20f4w2rpnj2" path="res://assets/audio/explosion.mp3" id="3_music"]
 
-[node name="EmptyRoom" type="Node2D"]
+[node name="EmptyRoom" type="Node2D" unique_id=1467363818]
 script = ExtResource("2_yr3tw")
 room_music = ExtResource("3_music")
 
-[node name="Player" parent="." instance=ExtResource("1_6yx73")]
+[node name="Player" parent="." unique_id=1976709185 instance=ExtResource("1_6yx73")]
 position = Vector2(0, 220)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=536995862]
 position = Vector2(0, 120)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1386288866]
 layer = 5
 
-[node name="InfoPanel" type="Panel" parent="CanvasLayer"]
+[node name="InfoPanel" type="Panel" parent="CanvasLayer" unique_id=616434368]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -28,8 +28,8 @@ offset_top = -150.0
 offset_right = 300.0
 offset_bottom = 150.0
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InfoPanel"]
-anchors_preset = 15
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InfoPanel" unique_id=396516470]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -39,17 +39,22 @@ theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InfoPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InfoPanel/MarginContainer" unique_id=509783861]
+layout_mode = 2
 
-[node name="Title" type="Label" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer" unique_id=1659614588]
+layout_mode = 2
 text = "Next Room (Placeholder)"
 horizontal_alignment = 1
 
-[node name="Body" type="Label" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer"]
-text = "You moved past the boss door.\nThis room is intentionally empty for now."
+[node name="Body" type="Label" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer" unique_id=1139990813]
+layout_mode = 2
+text = "You moved past the boss door.
+This room is intentionally empty for now."
 horizontal_alignment = 1
 
-[node name="ReturnToTitleButton" type="Button" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer"]
+[node name="ReturnToTitleButton" type="Button" parent="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer" unique_id=2142198938]
+layout_mode = 2
 text = "Return to Title"
 
 [connection signal="pressed" from="CanvasLayer/InfoPanel/MarginContainer/VBoxContainer/ReturnToTitleButton" to="." method="_on_return_to_title_button_pressed"]
