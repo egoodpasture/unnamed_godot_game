@@ -1,10 +1,11 @@
 extends Node2D
 
+const EMPTY_ROOM_INDEX := 1
 
 func _ready() -> void:
     if GameState.current_run.is_empty() and GameState.current_slot >= 1:
         GameState.create_new_run(GameState.current_slot)
-    GameState.update_current_run(scene_file_path, 1, int(GameState.current_run.get("bosses_defeated", 0)))
+    GameState.update_current_run(scene_file_path, EMPTY_ROOM_INDEX, int(GameState.current_run.get("bosses_defeated", 0)))
     GameState.save_current_run()
 
 

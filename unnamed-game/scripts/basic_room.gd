@@ -8,6 +8,9 @@ signal room_cleared
 @export var door_sprite_texture: Texture2D = preload("res://assets/sprites/placeholder_door.svg")
 @export var title_scene_path := "res://scenes/UI/title_menu.tscn"
 
+const BOSS_ROOM_INDEX := 0
+const NEXT_ROOM_INDEX := 1
+
 var enemies_alive := 0
 var battle_finished := false
 var battle_won := false
@@ -32,16 +35,16 @@ func _ready() -> void:
 
     if not GameState.current_run.is_empty():
         var bosses := int(GameState.current_run.get("bosses_defeated", 0))
-        GameState.update_current_run(scene_file_path, 0, bosses)
+        GameState.update_current_run(scene_file_path, BOSS_ROOM_INDEX, bosses)
+
+    if is_instance_valid(_player) and _player.has_signal("died"):
+        _player.died.connect(_on_player_died)
 
     _build_ui()
     _setup_door()
     spawn_enemies()
     lock_doors()
     _show_battle_text("BATTLE START")
-
-    if is_instance_valid(_player) and _player.has_signal("died"):
-        _player.died.connect(_on_player_died)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -86,7 +89,7 @@ func clear_room() -> void:
     room_cleared.emit()
 
     var bosses := int(GameState.current_run.get("bosses_defeated", 0)) + 1
-    GameState.update_current_run(next_room_scene.resource_path, 1, bosses)
+    GameState.update_current_run(next_room_scene.resource_path, NEXT_ROOM_INDEX, bosses)
     GameState.save_current_run(GameState.current_slot, {"in_battle": false})
 
     _show_battle_text("VICTORY! Door opened.")
@@ -110,7 +113,7 @@ func _on_door_body_entered(body: Node) -> void:
 
     if not GameState.current_run.is_empty():
         var bosses := int(GameState.current_run.get("bosses_defeated", 0))
-        GameState.update_current_run(next_room_scene.resource_path, 1, bosses)
+        GameState.update_current_run(next_room_scene.resource_path, NEXT_ROOM_INDEX, bosses)
         GameState.save_current_run(GameState.current_slot, {"in_battle": false})
 
     get_tree().change_scene_to_packed(next_room_scene)
@@ -291,7 +294,7 @@ func _on_resume_button_pressed() -> void:
 func _on_save_and_quit_button_pressed() -> void:
     if not GameState.current_run.is_empty():
         var bosses := int(GameState.current_run.get("bosses_defeated", 0))
-        GameState.update_current_run(scene_file_path, 0, bosses)
+        GameState.update_current_run(scene_file_path, BOSS_ROOM_INDEX, bosses)
         GameState.save_current_run(GameState.current_slot, {"in_battle": true})
     get_tree().paused = false
     get_tree().change_scene_to_file(title_scene_path)
