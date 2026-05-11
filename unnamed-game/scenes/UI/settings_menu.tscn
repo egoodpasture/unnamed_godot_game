@@ -1,0 +1,74 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3s6p34j8gb1j"]
+
+[ext_resource type="Script" path="res://scripts/UI/settings_menu.gd" id="1_nj4aq"]
+
+[node name="SettingsMenu" type="Control"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nj4aq")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(560, 360)
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer"]
+
+[node name="Title" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="MasterLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+text = "Master Volume"
+
+[node name="MasterSlider" type="HSlider" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+min_value = -40.0
+max_value = 6.0
+step = 0.5
+value = 0.0
+
+[node name="MusicLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+text = "Music Volume"
+
+[node name="MusicSlider" type="HSlider" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+min_value = -40.0
+max_value = 6.0
+step = 0.5
+value = 0.0
+
+[node name="SfxLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+text = "SFX Volume"
+
+[node name="SfxSlider" type="HSlider" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+min_value = -40.0
+max_value = 6.0
+step = 0.5
+value = 0.0
+
+[node name="BackButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+text = "Back"
+
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

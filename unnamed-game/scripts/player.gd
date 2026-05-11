@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal died
+
 @export var move_speed := 400.0 #???
 @export var sprint_multiplier := 1.8
 @export var tear_scene: PackedScene
@@ -173,6 +175,7 @@ func take_damage(amount: int):
 
 func die():
 	dead = true
+	died.emit()
 	player_sprite.visible = false
 	death_animation.play("explode")
 	death_sound.play()
