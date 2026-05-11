@@ -111,11 +111,6 @@ func _on_door_body_entered(body: Node) -> void:
     if not body.is_in_group("player"):
         return
 
-    if not GameState.current_run.is_empty():
-        var bosses := int(GameState.current_run.get("bosses_defeated", 0))
-        GameState.update_current_run(next_room_scene.resource_path, NEXT_ROOM_INDEX, bosses)
-        GameState.save_current_run(GameState.current_slot, {"in_battle": false})
-
     get_tree().change_scene_to_packed(next_room_scene)
 
 
