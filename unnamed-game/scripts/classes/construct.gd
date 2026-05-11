@@ -4,7 +4,6 @@ signal died
 
 @export var move_speed := 400.0 #???
 @export var sprint_multiplier := 1.8
-@export var tear_scene: PackedScene
 @export var fire_rate:= 0.3 #seconds between shots
 
 @export var max_health := 3
@@ -13,6 +12,8 @@ signal died
 @export var dodge_distance := 60.0 #pixels?
 @export var dodge_speed := 1200.0 # ???
 @export var dodge_tap_time := 0.25 #seconds
+
+@export var tear_scene: PackedScene
 
 @onready var shoot_point: Marker2D = $ShootPoint
 @onready var fire_timer: Timer = $FireCooldown
@@ -105,18 +106,6 @@ func handle_shooting():
 	shoot(direction)
 	fire_timer.start()
 
-func get_shoot_input() -> Vector2:
-	if Input.is_action_pressed("shoot_up"):
-		return Vector2.UP
-	if Input.is_action_pressed("shoot_down"):
-		return Vector2.DOWN
-	if Input.is_action_pressed("shoot_left"):
-		return Vector2.LEFT
-	if Input.is_action_pressed("shoot_right"):
-		return Vector2.RIGHT
-	
-	return Vector2.ZERO
-
 func get_shoot_direction() -> Vector2:
 	var shoot_dir = get_shoot_input()
 
@@ -130,6 +119,18 @@ func get_shoot_direction() -> Vector2:
 		shoot_dir = shoot_dir.normalized()
 
 	return shoot_dir
+
+func get_shoot_input() -> Vector2:
+	if Input.is_action_pressed("shoot_up"):
+		return Vector2.UP
+	if Input.is_action_pressed("shoot_down"):
+		return Vector2.DOWN
+	if Input.is_action_pressed("shoot_left"):
+		return Vector2.LEFT
+	if Input.is_action_pressed("shoot_right"):
+		return Vector2.RIGHT
+	
+	return Vector2.ZERO
 
 func dodge(direction: Vector2):
 	if direction == Vector2.ZERO: return
@@ -148,6 +149,7 @@ func shoot(direction: Vector2):
 	var tear = tear_scene.instantiate()
 	tear.global_position = shoot_point.global_position
 	tear.direction = direction
+	tear.source = "player"
 	get_parent().add_child(tear)
 
 func take_damage(amount: int):

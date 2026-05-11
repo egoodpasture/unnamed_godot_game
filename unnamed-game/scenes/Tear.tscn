@@ -44,9 +44,8 @@ animations = [{
 [node name="Tear" type="Area2D" unique_id=2131422644]
 scale = Vector2(1.5, 1.5)
 collision_layer = 16
-collision_mask = 6
+collision_mask = 7
 script = ExtResource("1_scwp1")
-range_distance = 300.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=118255853]
 scale = Vector2(2, 2)
