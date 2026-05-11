@@ -335,8 +335,15 @@ func _on_settings_menu_closed() -> void:
 func _setup_music() -> void:
 	if room_music == null:
 		return
+	var configured_stream: AudioStream = room_music.duplicate()
+	if configured_stream is AudioStreamMP3:
+		(configured_stream as AudioStreamMP3).loop = true
+	elif configured_stream is AudioStreamOggVorbis:
+		(configured_stream as AudioStreamOggVorbis).loop = true
+	elif configured_stream is AudioStreamWAV:
+		(configured_stream as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
 	_music_player = AudioStreamPlayer.new()
-	_music_player.stream = room_music
+	_music_player.stream = configured_stream
 	_music_player.bus = "Music"
 	_music_player.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_music_player)

@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://1x862v810jmk" path="res://assets/sprites/horiz_dodge_sheet.png" id="5_wvqkx"]
 [ext_resource type="AudioStream" uid="uid://cq20f4w2rpnj2" path="res://assets/audio/explosion.mp3" id="6_y0bja"]
 [ext_resource type="Texture2D" uid="uid://cllfnudovl1y8" path="res://assets/sprites/explosion.png" id="7_fff8t"]
+[ext_resource type="AudioStream" path="res://assets/audio/player_damage.wav" id="8_damage"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pfeki"]
 atlas = ExtResource("4_5imfu")
@@ -342,6 +343,10 @@ shape = SubResource("RectangleShape2D_mdl7e")
 [node name="ShootPoint" type="Marker2D" parent="." unique_id=634040588]
 
 [node name="FireCooldown" type="Timer" parent="." unique_id=1957307035]
+
+[node name="DamageSound" type="AudioStreamPlayer2D" parent="." unique_id=210000001]
+stream = ExtResource("8_damage")
+bus = &"SFX"
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=16058616 groups=["player_hurtbox"]]
 collision_mask = 2

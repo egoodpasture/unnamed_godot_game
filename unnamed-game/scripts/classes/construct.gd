@@ -24,6 +24,7 @@ signal died
 
 @onready var death_sound = $Death/DeathSound
 @onready var death_animation = $Death/DeathAnimation
+@onready var damage_sound = $DamageSound
 
 var health := max_health
 var dead := false
@@ -155,6 +156,9 @@ func shoot(direction: Vector2):
 func take_damage(amount: int):
 	if dead: return
 	if invincible: return
+
+	if is_instance_valid(damage_sound):
+		damage_sound.play()
 	
 	health -= amount
 	if health <= 0:

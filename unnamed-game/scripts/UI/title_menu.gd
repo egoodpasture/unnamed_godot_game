@@ -11,6 +11,9 @@ const BATTLE_SCENE_PATH := "res://scenes/Rooms/basic_room.tscn"
 @onready var _slot_1_button: Button = %Slot1Button
 @onready var _slot_2_button: Button = %Slot2Button
 @onready var _slot_3_button: Button = %Slot3Button
+@onready var _delete_slot_1_button: Button = %DeleteSlot1Button
+@onready var _delete_slot_2_button: Button = %DeleteSlot2Button
+@onready var _delete_slot_3_button: Button = %DeleteSlot3Button
 @onready var _settings_menu: Control = %SettingsMenu
 
 @onready var _class_buttons_container: VBoxContainer = %ClassButtonsContainer
@@ -44,15 +47,23 @@ func _show_panel(panel: Control) -> void:
 	_main_container.visible = (panel == _main_container)
 	_load_container.visible = (panel == _load_container)
 	_class_select_container.visible = (panel == _class_select_container)
+	_settings_menu.visible = (panel == _settings_menu)
 
 
 func _refresh_buttons() -> void:
 	var has_saves := GameState.has_any_save()
 	_continue_button.visible = has_saves
 	_load_button.visible = has_saves
+	var show_delete_buttons := not _new_game_mode
 	_slot_1_button.text = "Slot 1 - %s" % GameState.get_save_summary(1).get("label", "Empty")
 	_slot_2_button.text = "Slot 2 - %s" % GameState.get_save_summary(2).get("label", "Empty")
 	_slot_3_button.text = "Slot 3 - %s" % GameState.get_save_summary(3).get("label", "Empty")
+	_delete_slot_1_button.visible = show_delete_buttons
+	_delete_slot_2_button.visible = show_delete_buttons
+	_delete_slot_3_button.visible = show_delete_buttons
+	_delete_slot_1_button.disabled = not GameState.has_save(1)
+	_delete_slot_2_button.disabled = not GameState.has_save(2)
+	_delete_slot_3_button.disabled = not GameState.has_save(3)
 
 
 func _start_or_load_slot(slot: int) -> void:
@@ -91,7 +102,7 @@ func _on_load_button_pressed() -> void:
 
 
 func _on_settings_button_pressed() -> void:
-	_settings_menu.visible = true
+	_show_panel(_settings_menu)
 
 
 func _on_quit_button_pressed() -> void:
@@ -135,4 +146,23 @@ func _on_back_from_class_select_pressed() -> void:
 
 func _on_settings_menu_closed() -> void:
 	_refresh_buttons()
+	_show_panel(_main_container)
 
+
+func _delete_slot(slot: int) -> void:
+	GameState.clear_slot(slot)
+	_refresh_buttons()
+	if not _new_game_mode and not GameState.has_any_save():
+		_show_panel(_main_container)
+
+
+func _on_delete_slot_1_button_pressed() -> void:
+	_delete_slot(1)
+
+
+func _on_delete_slot_2_button_pressed() -> void:
+	_delete_slot(2)
+
+
+func _on_delete_slot_3_button_pressed() -> void:
+	_delete_slot(3)
