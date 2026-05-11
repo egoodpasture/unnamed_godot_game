@@ -7,6 +7,7 @@ signal room_cleared
 @export var settings_menu_scene: PackedScene = preload("res://scenes/UI/settings_menu.tscn")
 @export var door_sprite_texture: Texture2D = preload("res://assets/sprites/placeholder_door.svg")
 @export var title_scene_path := "res://scenes/UI/title_menu.tscn"
+@export var room_music: AudioStream
 
 const BOSS_ROOM_INDEX := 0
 const NEXT_ROOM_INDEX := 1
@@ -24,6 +25,7 @@ var _game_over_panel: Panel
 var _battle_label: Label
 var _stats_label: Label
 var _settings_menu: Control
+var _music_player: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -37,13 +39,17 @@ func _ready() -> void:
 		var bosses := int(GameState.current_run.get("bosses_defeated", 0))
 		GameState.update_current_run(scene_file_path, BOSS_ROOM_INDEX, bosses)
 
-	if is_instance_valid(_player) and _player.has_signal("died"):
-		_player.died.connect(_on_player_died)
+	# Explicitly pausable so they stop when the tree is paused
+	if is_instance_valid(_player):
+		_player.process_mode = Node.PROCESS_MODE_PAUSABLE
+		if _player.has_signal("died"):
+			_player.died.connect(_on_player_died)
 
 	_build_ui()
 	_setup_door()
 	spawn_enemies()
 	lock_doors()
+	_setup_music()
 	_show_battle_text("BATTLE START")
 
 
@@ -57,6 +63,8 @@ func spawn_enemies() -> void:
 	for spawn in $EnemySpawns.get_children():
 		var enemy = enemy_scene.instantiate()
 		enemy.global_position = spawn.global_position
+		# Explicitly pausable so enemies stop when the tree is paused
+		enemy.process_mode = Node.PROCESS_MODE_PAUSABLE
 		add_child(enemy)
 		enemies_alive += 1
 		enemy.died.connect(_on_enemy_died)
@@ -258,10 +266,14 @@ func _toggle_pause_menu() -> void:
 		_settings_menu.visible = false
 		_pause_menu.visible = false
 		get_tree().paused = false
+		if is_instance_valid(_music_player):
+			_music_player.stream_paused = false
 		return
 
 	get_tree().paused = true
 	_pause_menu.visible = true
+	if is_instance_valid(_music_player):
+		_music_player.stream_paused = true
 
 
 func _show_battle_text(text: String) -> void:
@@ -284,6 +296,8 @@ func _show_game_over() -> void:
 func _on_resume_button_pressed() -> void:
 	get_tree().paused = false
 	_pause_menu.visible = false
+	if is_instance_valid(_music_player):
+		_music_player.stream_paused = false
 
 
 func _on_save_and_quit_button_pressed() -> void:
@@ -292,6 +306,8 @@ func _on_save_and_quit_button_pressed() -> void:
 		GameState.update_current_run(scene_file_path, BOSS_ROOM_INDEX, bosses)
 		GameState.save_current_run(GameState.current_slot, {"in_battle": true})
 	get_tree().paused = false
+	if is_instance_valid(_music_player):
+		_music_player.stop()
 	get_tree().change_scene_to_file(title_scene_path)
 
 
@@ -301,6 +317,8 @@ func _on_abandon_run_button_pressed() -> void:
 	else:
 		GameState.clear_current_run()
 	get_tree().paused = false
+	if is_instance_valid(_music_player):
+		_music_player.stop()
 	get_tree().change_scene_to_file(title_scene_path)
 
 
@@ -312,6 +330,16 @@ func _on_pause_settings_button_pressed() -> void:
 func _on_settings_menu_closed() -> void:
 	if get_tree().paused and not battle_finished:
 		_pause_menu.visible = true
+
+
+func _setup_music() -> void:
+	_music_player = AudioStreamPlayer.new()
+	_music_player.stream = room_music
+	_music_player.bus = "Music"
+	_music_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_music_player)
+	if room_music != null:
+		_music_player.play()
 
 
 func _on_return_to_title_pressed() -> void:

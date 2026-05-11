@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b6k25q4pwi7ek" path="res://scenes/Enemies/boss1.tscn" id="2_lyy10"]
 [ext_resource type="PackedScene" uid="uid://c3gjipwwnb75k" path="res://scenes/Player.tscn" id="2_sv0tl"]
 [ext_resource type="Texture2D" uid="uid://b73soy0nn4riq" path="res://assets/TileSet.png" id="4_4har8"]
+[ext_resource type="AudioStream" uid="uid://cq20f4w2rpnj2" path="res://assets/audio/explosion.mp3" id="5_music"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ggny8"]
 resource_name = "Room"
@@ -22,6 +23,7 @@ size = Vector2(80, 20)
 [node name="Room" type="Node2D" unique_id=63129821]
 script = ExtResource("1_yc5m6")
 enemy_scene = ExtResource("2_lyy10")
+room_music = ExtResource("5_music")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=62523590]
 
